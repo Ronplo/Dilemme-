@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a0d2e">
+<title>Le Dilemme — deux chaises, une décision</title>
+
+<meta property="og:title" content="Le Dilemme 🍆🎂">
+<meta property="og:description" content="Tu entres dans une pièce. La porte se referme. Deux spotlights s'allument… Sur quelle chaise tu t'assois ?">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://i.imgur.com/placeholder.png">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Crect width='60' height='60' fill='%232d1b4d' rx='12'/%3E%3Cellipse cx='20' cy='30' rx='6' ry='13' fill='%237F77DD'/%3E%3Cpath d='M 17 17 Q 18 13 21 13 Q 23 14 23 18 Z' fill='%233B6D11'/%3E%3Crect x='34' y='26' width='14' height='6' fill='%23c97f3e'/%3E%3Crect x='34' y='22' width='14' height='4' rx='1' fill='%23f5deb3'/%3E%3C/svg%3E">
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  background: #0a0518;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+.screen {
+  width: 100%;
+  min-height: 100vh;
+  display: none;
+  flex-direction: column;
+  position: relative;
+}
+.screen.active { display: flex; }
+
+/* ===== SPLASH ===== */
+#splash {
+  background: linear-gradient(180deg, #1a0d2e 0%, #0a0518 100%);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.logo-box {
+  width: 130px;
+  height: 130px;
+  background: #2d1b4d;
+  border-radius: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28px;
+  border: 1px solid #4a2d6e;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.splash-title {
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+}
+.splash-tag {
+  font-size: 14px;
+  color: #a888d6;
+  font-style: italic;
+  margin-bottom: 50px;
+}
+.loader {
+  width: 40px;
+  height: 4px;
+  background: #2d1b4d;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.loader-fill {
+  height: 100%;
+  background: #c9a4f0;
+  width: 0;
+  animation: load 2s ease-out forwards;
+}
+@keyframes load {
+  to { width: 100%; }
+}
+
+/* ===== HOME ===== */
+#home {
+  background: linear-gradient(180deg, #1a0d2e 0%, #0a0518 100%);
+  padding: 50px 24px 30px;
+}
+.home-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.home-logo-mini {
+  width: 44px;
+  height: 44px;
+  background: #2d1b4d;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #4a2d6e;
+}
+.home-name { font-size: 16px; font-weight: 600; }
+.home-handle { font-size: 11px; color: #a888d6; }
+
+.hero {
+  text-align: center;
+  padding: 20px 0 32px;
+}
+.hero-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
+}
+.hero-sub {
+  font-size: 14px;
+  color: #a888d6;
+  line-height: 1.7;
+}
+
+.menu-card {
+  background: rgba(74, 45, 110, 0.25);
+  border: 1px solid #3a2459;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s;
+}
+.menu-card:active { transform: scale(0.98); background: rgba(74, 45, 110, 0.4); }
+.menu-icon {
+  width: 44px;
+  height: 44px;
+  background: #2d1b4d;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c9a4f0;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.menu-text-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+.menu-text-sub { font-size: 11px; color: #a888d6; }
+
+.cta {
+  background: #7F77DD;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 16px;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 18px;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s;
+}
+.cta:active { transform: scale(0.98); background: #6960c8; }
+
+.foot {
+  text-align: center;
+  font-size: 10px;
+  color: #6b4a8f;
+  margin-top: 24px;
+  line-height: 1.7;
+}
+
+/* ===== GAME ===== */
+#game {
+  background: #0a0518;
+  padding: 40px 18px 30px;
+}
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.back-btn {
+  background: transparent;
+  border: 1px solid #3a2459;
+  color: #c9a4f0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+}
+.game-title-wrap { text-align: center; flex: 1; }
+.game-title { font-size: 16px; font-weight: 600; }
+.game-sub { font-size: 11px; color: #a888d6; }
+.spacer { width: 36px; }
+
+.room {
+  background: #050214;
+  border: 1px solid #2a1a4d;
+  border-radius: 16px;
+  padding: 18px 12px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.spotlight-glow {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.4;
+  background: radial-gradient(ellipse at 50% 30%, rgba(255, 220, 120, 0.25) 0%, transparent 50%);
+}
+.spotlight-glow.left { left: 0; }
+.spotlight-glow.right { right: 0; }
+
+.chairs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.chair {
+  background: radial-gradient(circle at 50% 20%, rgba(201, 164, 240, 0.15) 0%, transparent 60%);
+  border-radius: 12px;
+  padding: 12px 6px;
+  text-align: center;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.chair:active { transform: scale(0.97); }
+.chair.selected-sit { border-color: #F0997B; }
+.chair.selected-eat { border-color: #97C459; }
+.chair-svg {
+  width: 100%;
+  max-width: 130px;
+  height: 150px;
+  display: block;
+  margin: 0 auto 6px;
+}
+.chair-label { font-size: 12px; font-weight: 600; color: #c9a4f0; margin-bottom: 2px; }
+.chair-desc { font-size: 10px; color: #a888d6; line-height: 1.3; }
+
+.action-label {
+  font-size: 12px;
+  color: #a888d6;
+  margin-bottom: 6px;
+  margin-top: 12px;
+  font-weight: 500;
+}
+.action-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.action-btn {
+  background: #1a0d2e;
+  border: 1px solid #3a2459;
+  color: #fff;
+  padding: 12px 6px;
+  border-radius: 11px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s;
+}
+.action-btn:active { transform: scale(0.97); }
+.action-btn.active-sit { background: #4A1B0C; border-color: #D85A30; }
+.action-btn.active-eat { background: #173404; border-color: #639922; }
+
+.verdict {
+  background: #1a0d2e;
+  border: 1px solid #3a2459;
+  border-radius: 12px;
+  padding: 14px;
+  min-height: 80px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #d4c4ed;
+  margin-top: 16px;
+}
+.verdict-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.verdict-empty {
+  color: #6b4a8f;
+  text-align: center;
+  padding-top: 18px;
+  font-style: italic;
+}
+
+.share-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 14px;
+}
+.share-btn {
+  background: #7F77DD;
+  border: none;
+  color: #fff;
+  padding: 12px;
+  border-radius: 11px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.share-btn.secondary {
+  background: transparent;
+  border: 1px solid #3a2459;
+  color: #c9a4f0;
+}
+.share-btn:active { transform: scale(0.97); }
+
+</style>
+</head>
+<body>
+
+<div id="splash" class="screen active">
+  <div class="logo-box">
+    <svg width="80" height="80" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="20" cy="30" rx="6" ry="13" fill="#7F77DD"/>
+      <ellipse cx="20" cy="30" rx="4" ry="11" fill="#534AB7"/>
+      <path d="M 17 17 Q 18 13 21 13 Q 23 14 23 18 Z" fill="#3B6D11"/>
+      <rect x="34" y="26" width="14" height="6" fill="#c97f3e"/>
+      <rect x="34" y="22" width="14" height="4" rx="1" fill="#f5deb3"/>
+      <circle cx="38" cy="22" r="1" fill="#d4453a"/>
+      <circle cx="41" cy="21" r="1" fill="#d4453a"/>
+      <circle cx="44" cy="22" r="1" fill="#d4453a"/>
+      <rect x="40" y="17" width="1" height="5" fill="#fff"/>
+      <path d="M 39 17 Q 41 14 42 17" fill="#FAC775"/>
+    </svg>
+  </div>
+  <h1 class="splash-title">Le Dilemme</h1>
+  <p class="splash-tag">deux chaises, une décision</p>
+  <div class="loader"><div class="loader-fill"></div></div>
+</div>
+
+<div id="home" class="screen">
+  <div class="home-header">
+    <div class="home-logo-mini">
+      <svg width="28" height="28" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="20" cy="30" rx="6" ry="13" fill="#7F77DD"/>
+        <path d="M 17 17 Q 18 13 21 13 Q 23 14 23 18 Z" fill="#3B6D11"/>
+        <rect x="34" y="26" width="14" height="6" fill="#c97f3e"/>
+        <rect x="34" y="22" width="14" height="4" rx="1" fill="#f5deb3"/>
+        <rect x="40" y="17" width="1" height="5" fill="#fff"/>
+      </svg>
+    </div>
+    <div>
+      <div class="home-name">Le Dilemme</div>
+      <div class="home-handle">v1.0 · party edition</div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h2 class="hero-title">À toi de choisir.</h2>
+    <p class="hero-sub">Tu entres dans une pièce.<br>La porte se referme.<br>Deux spotlights s'allument…</p>
+  </div>
+
+  <div class="menu-card" onclick="goToGame()">
+    <div class="menu-icon">▶</div>
+    <div>
+      <div class="menu-text-title">Jouer le classique</div>
+      <div class="menu-text-sub">L'aubergine et le gâteau</div>
+    </div>
+  </div>
+
+  <div class="menu-card" onclick="alert('Mode aléatoire — bientôt disponible 😏')">
+    <div class="menu-icon">🎲</div>
+    <div>
+      <div class="menu-text-title">Mode aléatoire</div>
+      <div class="menu-text-sub">2 objets surprises par tirage</div>
+    </div>
+  </div>
+
+  <div class="menu-card" onclick="shareApp()">
+    <div class="menu-icon">📤</div>
+    <div>
+      <div class="menu-text-title">Défier un ami</div>
+      <div class="menu-text-sub">Envoie le dilemme à Anthony</div>
+    </div>
+  </div>
+
+  <button class="cta" onclick="goToGame()">Commencer →</button>
+
+  <p class="foot">
+    Une app inutile, mais drôle.<br>Conçue pour les partys et les soupers de famille douteux.
+  </p>
+</div>
+
+<div id="game" class="screen">
+  <div class="game-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <div class="game-title-wrap">
+      <div class="game-title">Le Dilemme</div>
+      <div class="game-sub">2 chaises. 1 décision. Pas de jugement.</div>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <div class="room">
+    <div class="spotlight-glow left"></div>
+    <div class="spotlight-glow right"></div>
+    <div class="chairs">
+      <div class="chair" id="chair-A" onclick="selectChair('A')">
+        <svg class="chair-svg" viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="50" cy="150" rx="34" ry="4" fill="#1a1a1a"/>
+          <rect x="24" y="20" width="52" height="6" rx="2" fill="#7a4f28"/>
+          <rect x="24" y="32" width="52" height="6" rx="2" fill="#7a4f28"/>
+          <rect x="24" y="20" width="6" height="80" fill="#6b4423"/>
+          <rect x="70" y="20" width="6" height="80" fill="#6b4423"/>
+          <rect x="22" y="95" width="56" height="10" rx="2" fill="#6b4423"/>
+          <rect x="22" y="55" width="56" height="44" rx="3" fill="#7a4f28"/>
+          <rect x="24" y="105" width="6" height="40" fill="#5a3818"/>
+          <rect x="70" y="105" width="6" height="40" fill="#5a3818"/>
+          <ellipse cx="50" cy="94" rx="9" ry="2.5" fill="#2a1a08" opacity="0.7"/>
+          <ellipse cx="50" cy="75" rx="9" ry="22" fill="#7F77DD"/>
+          <ellipse cx="50" cy="75" rx="6.5" ry="19" fill="#534AB7"/>
+          <path d="M 44 55 Q 43 49 47 47 Q 50 48 50 53 Q 52 48 55 49 Q 57 52 56 56 Z" fill="#3B6D11"/>
+          <ellipse cx="47" cy="67" rx="1.8" ry="6" fill="#fff" opacity="0.55"/>
+          <ellipse cx="45" cy="83" rx="1" ry="3" fill="#fff" opacity="0.35"/>
+        </svg>
+        <div class="chair-label">Chaise A</div>
+        <div class="chair-desc">un pénis en érection<br>bien lubrifié</div>
+      </div>
+      <div class="chair" id="chair-B" onclick="selectChair('B')">
+        <svg class="chair-svg" viewBox="0 0 100 160" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="50" cy="150" rx="34" ry="4" fill="#1a1a1a"/>
+          <rect x="24" y="20" width="52" height="6" rx="2" fill="#7a4f28"/>
+          <rect x="24" y="32" width="52" height="6" rx="2" fill="#7a4f28"/>
+          <rect x="24" y="20" width="6" height="80" fill="#6b4423"/>
+          <rect x="70" y="20" width="6" height="80" fill="#6b4423"/>
+          <rect x="22" y="95" width="56" height="10" rx="2" fill="#6b4423"/>
+          <rect x="22" y="55" width="56" height="44" rx="3" fill="#7a4f28"/>
+          <rect x="24" y="105" width="6" height="40" fill="#5a3818"/>
+          <rect x="70" y="105" width="6" height="40" fill="#5a3818"/>
+          <ellipse cx="50" cy="85" rx="20" ry="6" fill="#3d2817"/>
+          <rect x="30" y="73" width="40" height="14" fill="#c97f3e"/>
+          <rect x="30" y="67" width="40" height="8" rx="2" fill="#f5deb3"/>
+          <circle cx="38" cy="67" r="2" fill="#d4453a"/>
+          <circle cx="50" cy="65" r="2" fill="#d4453a"/>
+          <circle cx="62" cy="67" r="2" fill="#d4453a"/>
+          <rect x="48" y="57" width="2" height="10" fill="#fff"/>
+          <path d="M 47 57 Q 49 53 51 57" fill="#FAC775"/>
+        </svg>
+        <div class="chair-label">Chaise B</div>
+        <div class="chair-desc">ton gâteau préféré</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-label">Je m'assois sur :</div>
+  <div class="action-row">
+    <button class="action-btn" id="sit-A" onclick="setAction('sit','A')">🪑 Chaise A</button>
+    <button class="action-btn" id="sit-B" onclick="setAction('sit','B')">🪑 Chaise B</button>
+  </div>
+
+  <div class="action-label">Je mange sur :</div>
+  <div class="action-row">
+    <button class="action-btn" id="eat-A" onclick="setAction('eat','A')">🍴 Chaise A</button>
+    <button class="action-btn" id="eat-B" onclick="setAction('eat','B')">🍴 Chaise B</button>
+  </div>
+
+  <div class="verdict" id="verdict">
+    <div class="verdict-empty">Fais ton choix pour découvrir ton verdict 👀</div>
+  </div>
+
+  <div class="share-row">
+    <button class="share-btn" onclick="shareApp()">📤 Partager</button>
+    <button class="share-btn secondary" onclick="reset()">🔄 Recommencer</button>
+  </div>
+</div>
+
+<script>
+let sitChoice = null;
+let eatChoice = null;
+
+const verdicts = {
+  'A-A': { title: 'Le chaos absolu 🤡', text: "T'es assis sur la chaise A ET tu manges dessus ? Honnêtement on t'admire pour la cohérence. Le gâteau pleure dans le coin." },
+  'A-B': { title: 'Le philosophe pragmatique 🧠', text: "Tu sacrifies ton confort pour préserver le gâteau intact. Anthony serait fier. La chaise A, moins." },
+  'B-A': { title: 'Le génie incompris 🏆', text: "Chaise normale pour s'asseoir, gâteau intact pour manger. Tu as cassé le dilemme. Bravo champion." },
+  'B-B': { title: 'Le destructeur de party 💀', text: "T'es assis SUR ton gâteau préféré et tu le manges en même temps ? C'est du cardio émotionnel ça." }
+};
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+setTimeout(() => showScreen('home'), 2200);
+
+function goToGame() { showScreen('game'); }
+function goHome() { showScreen('home'); }
+
+function selectChair(id) {
+  if (!sitChoice) setAction('sit', id);
+  else if (!eatChoice) setAction('eat', id);
+  else {
+    setAction('sit', id);
+    eatChoice = null;
+    document.querySelectorAll('[id^="eat-"]').forEach(b => b.classList.remove('active-eat'));
+    document.querySelectorAll('.chair').forEach(c => c.classList.remove('selected-eat'));
+    updateVerdict();
+  }
+}
+
+function setAction(action, chair) {
+  if (action === 'sit') {
+    sitChoice = chair;
+    document.getElementById('sit-A').classList.remove('active-sit');
+    document.getElementById('sit-B').classList.remove('active-sit');
+    document.getElementById('sit-' + chair).classList.add('active-sit');
+    document.querySelectorAll('.chair').forEach(c => c.classList.remove('selected-sit'));
+    document.getElementById('chair-' + chair).classList.add('selected-sit');
+  } else {
+    eatChoice = chair;
+    document.getElementById('eat-A').classList.remove('active-eat');
+    document.getElementById('eat-B').classList.remove('active-eat');
+    document.getElementById('eat-' + chair).classList.add('active-eat');
+    document.querySelectorAll('.chair').forEach(c => c.classList.remove('selected-eat'));
+    document.getElementById('chair-' + chair).classList.add('selected-eat');
+  }
+  updateVerdict();
+}
+
+function updateVerdict() {
+  const el = document.getElementById('verdict');
+  if (!sitChoice || !eatChoice) {
+    el.innerHTML = '<div class="verdict-empty">Fais ton choix pour découvrir ton verdict 👀</div>';
+    return;
+  }
+  const key = sitChoice + '-' + eatChoice;
+  const v = verdicts[key];
+  el.innerHTML = '<div class="verdict-title">' + v.title + '</div><div>' + v.text + '</div>';
+}
+
+function reset() {
+  sitChoice = null;
+  eatChoice = null;
+  document.querySelectorAll('.action-btn').forEach(b => {
+    b.classList.remove('active-sit');
+    b.classList.remove('active-eat');
+  });
+  document.querySelectorAll('.chair').forEach(c => {
+    c.classList.remove('selected-sit');
+    c.classList.remove('selected-eat');
+  });
+  updateVerdict();
+}
+
+function shareApp() {
+  const url = window.location.href;
+  const text = "Essaye ce dilemme 🍆🎂 → ";
+  if (navigator.share) {
+    navigator.share({
+      title: 'Le Dilemme',
+      text: text,
+      url: url
+    }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text + url).then(() => {
+      alert('Lien copié ! Colle-le dans Messenger 📲');
+    }).catch(() => {
+      prompt('Copie ce lien et envoie-le :', url);
+    });
+  }
+}
+</script>
+</body>
+</html>
